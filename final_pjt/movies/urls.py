@@ -9,4 +9,6 @@ urlpatterns = [
     path('index/', views.index, name="index"),
     # 영화를 클릭했을 시 이동할 detail 페이지
     path('movie_detail/<int:movie_pk>', views.movie_detail, name='detail'),
+    path('movie_detail/<int:movie_pk>/like', views.movie_like, name='like'),
+    
 ]

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p>영화 상세 페이지임</p>
+<p>{{ movie.title }}</p>
+<p>{{ movie.overview }}</p>
+<form action="{% url 'movies:like' movie.pk %}" method="POST">
+  {% csrf_token %}
+  {% comment %} {% if user in  %} {% endcomment %}
+  <button>좋아요</button>  
+</form>
+
+{% comment %} <form id="like-form" data-review-id="{{review.pk}}">
+  {% csrf_token %}
+  {% if user in review.like_users.all %}
+    <button type="submit" id="like-{{ review.pk }}">좋아요 취소</button>
+  {% else %}
+    <button type="submit" id="like-{{ review.pk }}">좋아요</button>
+  {% endif %}
+</form> {% endcomment %}
+
+
+{% endblock content %}
