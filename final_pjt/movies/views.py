@@ -72,24 +72,26 @@ def index(request):
                 like_movie_id.add(movie.movie_id)
             else:
                 director_lst[movie.director] += 1
-        print(like_movie_id)
+                like_movie_id.add(movie.movie_id)
         # 높은 순으로 정렬된 영화 감독 이름
         director_lst = sorted(director_lst.items(),
                               key=lambda x: x[1], reverse=True)
-        recommand_movie = set()
 
+        recommand_movie = set()
         for key in director_lst:
             for movie in movie_data:
-                if key[0] == movie.director and movie.movie_id not in like_movie_id:
-                    recommand_movie.add(movie)
-
-                    if len(recommand_movie) >= 4:
-                        context = {
-                            'form': form,
-                            'like_movie': like_movie,
-                            'recommand_movie': list(recommand_movie)
-                        }
-                        return render(request, 'movies/index.html', context)
+                if key[0] == movie.director:
+                    if movie.movie_id not in like_movie_id:
+                        print(f'좋아요 목록 : {like_movie_id}')
+                        print(f'영화 id : {movie.movie_id}')
+                        recommand_movie.add(movie)
+                        if len(recommand_movie) >= 4:
+                            context = {
+                                'form': form,
+                                'like_movie': like_movie,
+                                'recommand_movie': list(recommand_movie)
+                            }
+                            return render(request, 'movies/index.html', context)
 
         else:
             context = {
