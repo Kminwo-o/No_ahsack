@@ -57,11 +57,47 @@ def index(request):
             if search_query.lower() in movie.title.lower():  # 검색어가 영화 제목에 포함되는지 확인
                 matched_movies.append(movie)  # 부분일치하는 영화 제목을 리스트에 추가
 
-        context = {
-            'matched_movies': matched_movies,
-            'form': form,
-        }
+        director_lst = dict()
+        like_movie = user.movie_set.all()
+        like_movie_id = set()
+        for movie in like_movie:
+            if movie.director not in director_lst:
+                director_lst[movie.director] = 1
+                like_movie_id.add(movie.movie_id)
+            else:
+                director_lst[movie.director] += 1
+                like_movie_id.add(movie.movie_id)
+        # 높은 순으로 정렬된 영화 감독 이름
+        director_lst = sorted(director_lst.items(),
+                              key=lambda x: x[1], reverse=True)
+
+        recommand_movie = set()
+        for key in director_lst:
+            for movie in movie_data:
+                if key[0] == movie.director:
+                    if movie.movie_id not in like_movie_id:
+                        print(f'좋아요 목록 : {like_movie_id}')
+                        print(f'영화 id : {movie.movie_id}')
+                        recommand_movie.add(movie)
+
+                        # 추천 하고 싶은 영화 개수
+                        if len(recommand_movie) >= 4:
+                            context = {
+                                'form': form,
+                                'like_movie': like_movie,
+                                'recommand_movie': recommand_movie,
+                                'matched_movies': matched_movies,
+                            }
+                            return render(request, 'movies/index.html', context)
+        else:
+            context = {
+                'form': form,
+                'like_movie': like_movie,
+                'recommand_movie': recommand_movie,
+                'matched_movies': matched_movies,
+            }
         return render(request, 'movies/index.html', context)
+
     else:
         director_lst = dict()
         like_movie = user.movie_set.all()
@@ -85,11 +121,13 @@ def index(request):
                         print(f'좋아요 목록 : {like_movie_id}')
                         print(f'영화 id : {movie.movie_id}')
                         recommand_movie.add(movie)
+
+                        # 추천 하고 싶은 영화 개수
                         if len(recommand_movie) >= 4:
                             context = {
                                 'form': form,
                                 'like_movie': like_movie,
-                                'recommand_movie': list(recommand_movie)
+                                'recommand_movie': recommand_movie
                             }
                             return render(request, 'movies/index.html', context)
 
