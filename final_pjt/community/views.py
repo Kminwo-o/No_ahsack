@@ -69,7 +69,7 @@ def like(request, review_pk):
     if request.user.is_authenticated:
         review = get_object_or_404(Review, pk=review_pk)
         user = request.user
-
+        
         if review.like_users.filter(pk=user.pk).exists():
             review.like_users.remove(user)
             is_liked = False
@@ -82,4 +82,5 @@ def like(request, review_pk):
             'like_count': like_count
         }
         return JsonResponse(context)
+        # return redirect('community:index')
     return redirect('accounts:login')

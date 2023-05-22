@@ -1,23 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>영화 상세 페이지임</p>
-<p>{{ movie.title }}</p>
+
+<h1>{{ movie.title }}</h1>
+<p><img src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt=""></p>
 <p>{{ movie.overview }}</p>
-<form action="{% url 'movies:like' movie.pk %}" method="POST">
+<p>개봉일 : {{ movie.release_date }}</p>
+<p>감독 : {{ movie.director }}</p>
+
+<form action="{% url 'movies:like' movie.pk %}" method="POST" id="like-form" data-movie-id="{{movie.pk}}">
   {% csrf_token %}
-  {% comment %} {% if user in  %} {% endcomment %}
-  <button>좋아요</button>  
+  {% if user in movie.users.all %}
+    <button type="submit" id="like-{{ movie.pk }}">좋아요 취소</button>
+  {% else %}
+    <button type="submit" id="like-{{ movie.pk }}">좋아요</button>
+  {% endif %}
 </form>
 
-{% comment %} <form id="like-form" data-review-id="{{review.pk}}">
-  {% csrf_token %}
-  {% if user in review.like_users.all %}
-    <button type="submit" id="like-{{ review.pk }}">좋아요 취소</button>
-  {% else %}
-    <button type="submit" id="like-{{ review.pk }}">좋아요</button>
-  {% endif %}
-</form> {% endcomment %}
-
-
 {% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const forms = document.querySelectorAll("#like-form");
+  const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+  forms.forEach((form) => {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const movieId = event.target.dataset.movieId;
+      const btnLike = document.querySelector(`#like-${movieId}`);
+      const likeCount = document.querySelector(`#like-count-${movieId}`);
+                  
+      axios({
+        method: "post",
+        url: `/movies/movie_detail/${movieId}/like/`,
+        headers: { "X-CSRFToken": csrfToken },
+      })
+        .then((response) => {
+          //likeCount.innerText = response.data.like_count;
+          if (response.data.is_liked) {
+            btnLike.innerText = "좋아요 취소";
+          } else {
+            btnLike.innerText = "좋아요";
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    });
+  });
+</script>
+{% endblock script %}

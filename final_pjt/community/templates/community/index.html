@@ -1,6 +1,9 @@
 {% extends 'base.html' %} {% block content %}
 <h1>Community</h1>
-<hr />
+<form action="{% url 'community:create' %}" method="GET">
+  <button>글쓰기</button>
+</form>
+<hr >
 {% for review in reviews %} {% comment %}
 <p>
   작성자 :
@@ -16,9 +19,10 @@
   >
 </p>
 {% endcomment %}
-<p>글 번호: {{ review.pk }}</p>
-<p>글 제목: {{ review.title }}</p>
-<p>글 내용: {{ review.content }}</p>
+{% comment %} <p>글 번호: {{ review.pk }}</p> {% endcomment %}
+<a href="{% url 'community:detail' review.pk %}">글 제목: {{ review.title }}</a>
+{% comment %} <p>글 내용: {{ review.content }}</p> {% endcomment %}
+{% comment %} <form  action = "{% url 'community:like' review.pk %}" method="POST" id="like-form" data-review-id="{{review.pk}}"> {% endcomment %}
 <form id="like-form" data-review-id="{{review.pk}}">
   {% csrf_token %} {% if user in review.like_users.all %}
   <button type="submit" id="like-{{ review.pk }}">좋아요 취소</button>
@@ -32,7 +36,7 @@
   >
   명이 이 글을 좋아합니다.
 </p>
-<a href="{% url 'community:detail' review.pk %}">[detail]</a>
+
 <hr />
 {% endfor %} {% endblock content %} {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -45,6 +49,7 @@
       const reviewId = event.target.dataset.reviewId;
       const btnLike = document.querySelector(`#like-${reviewId}`);
       const likeCount = document.querySelector(`#like-count-${reviewId}`);
+     
       axios({
         method: "post",
         url: `/community/${reviewId}/like/`,

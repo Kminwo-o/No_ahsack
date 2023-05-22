@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import (require_http_methods, require_POST,
                                           require_safe)
-
+from django.http import JsonResponse
 # from django.db.models import Movie
 from .forms import PostSearchForm
 from .models import Movie
@@ -16,25 +16,46 @@ def movie_detail(request, movie_pk):
     }
     return render(request, 'movies/detail.html', context)
 
-
-@require_http_methods(['POST'])
+@require_POST
 def movie_like(request, movie_pk):
-    movie = get_object_or_404(Movie, pk=movie_pk)
-    user = request.user
+    if request.user.is_authenticated:
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        user = request.user
+        
+        if movie.users.filter(pk=user.pk).exists():
+            movie.users.remove(user)
+            is_liked = False
+        else:
+            movie.users.add(user)
+            is_liked = True
+        # like_count = movie.users.count()
+        context = {
+            'is_liked': is_liked,
+            # 'like_count': like_count
+        }
+        return JsonResponse(context)
+        # return redirect('community:index')
+    return redirect('accounts:login')
 
-    if movie.users.filter(pk=user.pk).exists():
-        movie.users.remove(user)
-        # is_liked = False
-    else:
-        movie.users.add(user)
-        # is_liked = True
-    # like_count = review.like_users.count()
-    # context = {
-    #     'is_liked': is_liked,
-    #     'like_count': like_count
-    # }
 
-    return redirect('movies:detail', movie_pk)
+# @require_http_methods(['POST'])
+# def movie_like(request, movie_pk):
+#     movie = get_object_or_404(Movie, pk=movie_pk)
+#     user = request.user
+
+#     if movie.users.filter(pk=user.pk).exists():
+#         movie.users.remove(user)
+#         is_liked = False
+#     else:
+#         movie.users.add(user)
+#         is_liked = True
+#     like_count = movie.like_users.count()
+#     context = {
+#         'is_liked': is_liked,
+#         'like_count': like_count
+#     }
+
+#     return redirect('movies:detail', movie_pk)
 
 
 @require_http_methods(['GET', 'POST'])
@@ -76,8 +97,6 @@ def index(request):
             for movie in movie_data:
                 if key[0] == movie.director:
                     if movie.movie_id not in like_movie_id:
-                        print(f'좋아요 목록 : {like_movie_id}')
-                        print(f'영화 id : {movie.movie_id}')
                         recommand_movie.add(movie)
 
                         # 추천 하고 싶은 영화 개수
@@ -118,8 +137,7 @@ def index(request):
             for movie in movie_data:
                 if key[0] == movie.director:
                     if movie.movie_id not in like_movie_id:
-                        print(f'좋아요 목록 : {like_movie_id}')
-                        print(f'영화 id : {movie.movie_id}')
+                    
                         recommand_movie.add(movie)
 
                         # 추천 하고 싶은 영화 개수

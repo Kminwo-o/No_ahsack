@@ -3,7 +3,9 @@
 <h1>Sign Up</h1>
 <form action="" method="POST">
   {% csrf_token %}
-  {{ form.as_p }}
+  <p>아이디 : {{ form.username }}</p>
+  <p>비밀번호 : {{ form.password1 }}</p>
+  <p>비밀번호 확인 : {{ form.password2 }}</p>  
   <input type="submit">
 </form>
 {% endblock content %}

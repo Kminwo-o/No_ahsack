@@ -2,14 +2,15 @@
 
 {% block content %}
   <h2 class="text-center">DETAIL</h2>
-  <h3>{{ review.pk }} 번째 글</h3>
+  {% comment %} <h3>{{ review.pk }} 번째 글</h3> {% endcomment %}
   <hr>
-  <p>제목: {{ review.title }}</p>
-  <p>영화 제목: {{ review.movie_title }}</p>
+  <h1> {{ review.title }}</h1>
+  <p>작성자: {{ review.user}}</p>
+  {% comment %} <p>영화 제목: {{ review.movie_title }}</p> {% endcomment %}
   <p>내용: {{ review.content }}</p>
   <p>평점: {{ review.rank }}</p>
   <p>작성 시각: {{ review.created_at }}</p>
-  <p>수정 시각: {{ review.updated_at }}</p>
+  {% comment %} <p>수정 시각: {{ review.updated_at }}</p> {% endcomment %}
   <hr>
   <h4>댓글 목록</h4>
   {% if comments|length %}
@@ -32,5 +33,5 @@
   {% else %}
     <a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
   {% endif %}
-  <a href="{% url 'community:index' %}">[back]</a>
+  <a href="{% url 'community:index' %}">[목록으로]</a>
 {% endblock  %}

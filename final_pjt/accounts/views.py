@@ -19,7 +19,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('movie:index')
+            return redirect('movies:index')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -49,7 +49,7 @@ def login(request):
 # @require_POST
 def logout(request):
     auth_logout(request)
-    return redirect('community:index')
+    return redirect('accounts:login')
 
 
 @login_required

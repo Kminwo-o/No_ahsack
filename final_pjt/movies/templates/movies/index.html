@@ -5,15 +5,34 @@
   <input type="submit" value="검색" />
 </form>
 
+{% if recommand_movie %}
 <h2>추천 영화 목록 쫘라락</h2>
 
-{% for movie in recommand_movie %}
-<p>{{ movie.title }}</p>
-{% endfor %}
+<div class="card-container d-flex flex-wrap">
+  {% for movie in recommand_movie %}
+  <a href="{% url 'movies:detail' movie.pk %}">
+    <div class="card col-3" style="width: 400px; height: 600px;">
+      <img src="https://image.tmdb.org/t/p/original/{{movie.poster_path}}" class="card-img-top" alt="..." style=" width: 100%; height: 100%; ">
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% else %}
+<p>하나 이상의 영화를 좋아요 해주세요!</p>
+{% endif %}
+
 {% if request.method == 'POST' %} 
 <h3>검색 결과</h3>
-{% for movie in matched_movies %}
-  <p> <a href="{% url 'movies:detail' movie.pk%}">{{movie.title}}</a></p>
-{% endfor %}
+<div class="card-container d-flex flex-wrap">
+  {% for movie in matched_movies %}
+  <a href="{% url 'movies:detail' movie.pk%}">
+    <div class="card col-3" style="width: 400px; height: 600px;">
+      <img src="https://image.tmdb.org/t/p/original/{{movie.poster_path}}" alt="" style="object-fit: cover; width: 100%; height: 100%;">
+      {{movie.title}}
+    </div>
+  </a>
+  {% endfor %}
+</div>
 {% endif %} 
 {% endblock content %}
