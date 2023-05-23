@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% comment %} <header class="py-5 bg-image-full" style="background-image: url('https://image.tmdb.org/t/p/w500/{{movie.poster_path}}')">   {% endcomment %}
+{% comment %} <header class="py-5 bg-image-full" style="background-image: url('https://image.tmdb.org/t/p/w500/{{movie.poster_path}}'); background-size: cover;">   {% endcomment %}
+{% comment %} <header class="py-5 bg-image-full" style="background-image: url('https://image.tmdb.org/t/p/original/{{movie.poster_path}}'); background-size: contain; background-repeat: no-repeat; background-position: center;"> {% endcomment %}
+<header class="py-5 bg-image-full" style="background-image: url('https://image.tmdb.org/t/p/original/{{movie.poster_path}}'); background-size: 100% auto; background-repeat: no-repeat; background-position: center; height: 500px;">
+</header>
+
+
+
+
 
 <h1>{{ movie.title }}</h1>
-<p><img src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt=""></p>
+{% comment %} <p><img src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt=""></p> {% endcomment %}
 <p>{{ movie.overview }}</p>
 <p>개봉일 : {{ movie.release_date }}</p>
 <p>감독 : {{ movie.director }}</p>
