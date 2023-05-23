@@ -82,5 +82,34 @@ def like(request, review_pk):
             'like_count': like_count
         }
         return JsonResponse(context)
-        # return redirect('community:index')
+        
     return redirect('accounts:login')
+
+@require_POST
+def delete(request, review_pk):
+    # 게시글 작성자와 로그인된 사용자가 같으면 삭제하도록 변경
+    if request.user.is_authenticated:
+        review = Review.objects.get(pk=review_pk)
+        if review.user == request.user:
+            review.delete()
+    return redirect('community:index')
+
+@require_http_methods(['GET', 'POST'])
+def update(request, review_pk):
+    review = Review.objects.get(pk=review_pk)
+    if review.user == request.user:
+        if request.method == 'POST':
+            form = ReviewForm(request.POST, instance=review)
+            if form.is_valid():
+                form.save()
+                return redirect('community:detail', review_pk=review.pk)
+        else:
+            
+            form = ReviewForm(instance=review)
+
+        context = {'form': form, 'review': review}
+        return render(request, 'community/update.html', context)
+    else:
+        return redirect('community:index')
+
+

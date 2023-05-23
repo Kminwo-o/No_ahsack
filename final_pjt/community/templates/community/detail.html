@@ -6,11 +6,21 @@
   <hr>
   <h1> {{ review.title }}</h1>
   <p>작성자: {{ review.user}}</p>
-  {% comment %} <p>영화 제목: {{ review.movie_title }}</p> {% endcomment %}
   <p>내용: {{ review.content }}</p>
   <p>평점: {{ review.rank }}</p>
   <p>작성 시각: {{ review.created_at }}</p>
-  {% comment %} <p>수정 시각: {{ review.updated_at }}</p> {% endcomment %}
+{% comment %} 삭제하기와 수정하기는 글작성자와 로그인 유저가 같아야 버튼이 활성화됩니다. {% endcomment %}
+  {% if user == review.user %} 
+  <form action="{% url 'community:update' review.pk %}" method="GET">
+    {% csrf_token %}
+    <input type="submit" value="수정하기">
+  </form>
+  <form action="{% url 'community:delete' review.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제하기">
+  </form>
+  {% else %}
+  {% endif %}
   <hr>
   <h4>댓글 목록</h4>
   {% if comments|length %}

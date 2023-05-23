@@ -5,6 +5,7 @@ from django.http import JsonResponse
 # from django.db.models import Movie
 from .forms import PostSearchForm
 from .models import Movie
+import random
 
 
 # Create your views here.
@@ -97,6 +98,7 @@ def index(request):
             for movie in movie_data:
                 if key[0] == movie.director:
                     if movie.movie_id not in like_movie_id:
+
                         recommand_movie.add(movie)
 
                         # 추천 하고 싶은 영화 개수
@@ -132,27 +134,19 @@ def index(request):
         director_lst = sorted(director_lst.items(),
                               key=lambda x: x[1], reverse=True)
 
-        recommand_movie = set()
+        recommand_movie = []
         for key in director_lst:
             for movie in movie_data:
                 if key[0] == movie.director:
-                    if movie.movie_id not in like_movie_id:
-                    
-                        recommand_movie.add(movie)
-
-                        # 추천 하고 싶은 영화 개수
-                        if len(recommand_movie) >= 4:
-                            context = {
-                                'form': form,
-                                'like_movie': like_movie,
-                                'recommand_movie': recommand_movie
-                            }
-                            return render(request, 'movies/index.html', context)
+                    if movie.movie_id not in like_movie_id and movie not in recommand_movie:
+                        recommand_movie.append(movie)
 
         else:
+            random.shuffle(recommand_movie)
             context = {
                 'form': form,
                 'like_movie': like_movie,
-                'recommand_movie': recommand_movie
+                'recommand_movie': recommand_movie[:4]
             }
+
         return render(request, 'movies/index.html', context)

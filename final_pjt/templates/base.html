@@ -13,9 +13,9 @@
     <nav>
       {% if user.is_authenticated %}
       <a href="{% url 'accounts:logout' %}">로그아웃</a>
-      {% endif %}
       <a href="{% url 'movies:index' %}">홈으로</a>      
       <a href="{% url 'community:index' %}">커뮤니티</a>      
+      {% endif %}
     </nav>
   </div>
   {% block content %}{% endblock content %}
