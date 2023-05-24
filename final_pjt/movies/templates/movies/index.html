@@ -1,18 +1,28 @@
 {% extends 'base.html' %} 
 
 {% block style %}
+.search_bar input[type="text"] {
+    max-width: 400px;
+    min-width: 400px;
+    height: 60px; 
+.search-word label_tag {
+    font-size: 22px;
+  }
+}
+
 {% endblock style %}
 {% block content %}
-<div class="box p-5 mt-3">
-<div class="mt-5 p-3 text-center top-search container-fluid">
-<form action=""  method="POST">
-  {% csrf_token %} {{ form }} 
-  <input type="submit" value="GO">
-</form>
+<div class="p-3 text-center top-search container-fluid search_bar">
+<form action="" method="POST">
+  {% csrf_token %}
+  {% comment %} <label for="{{ form.search_word.id_for_label }}" style="font-size: 32px;">{{ form.search_word.label }}</label> {% endcomment %}
+  {{ form.search_word }}
+  <input type="submit" value="검색" class="my-button" style="width: 60px; height:60px; padding: 0px;">
+  </form>
 </div>
 
 {% if recommand_movie %}
-<h2>추천 영화 목록 쫘라락</h2>
+<h2>추천 영화 목록 </h2>
 
 <section id="gallery" class="gallery mt-8">
   <div class="container-fluid">
@@ -36,25 +46,37 @@
     </div>
   </div>
 </section>
-</div>
-
-
 
 {% else %}
-<p>하나 이상의 영화를 좋아요 해주세요!</p>
+<h4>하나 이상의 영화를 좋아요 해주세요!</h4>
+<h4>좋아요 한 영화가 많을수록 추천영화가 다양해집니다!</h4>
 {% endif %}
 
-{% if request.method == 'POST' %} 
-<h3>검색 결과</h3>
-<div class="card-container d-flex flex-wrap">
-  {% for movie in matched_movies %}
-  <a href="{% url 'movies:detail' movie.pk%}">
-    <div class="card col-3" style="width: 400px; height: 600px;">
-      <img src="https://image.tmdb.org/t/p/original/{{movie.poster_path}}" alt="" style="object-fit: cover; width: 100%; height: 100%;">
-      {{movie.title}}
+{% if request.method == 'POST' %}
+
+<div style="padding-top: 50px;">
+  {% if search_value %}
+  <h2> "{{ search_value }}"에 대한 검색 결과</h2>
+  {% endif %}
+  <section id="gallery" class="gallery mt-8">
+    <div class="container-fluid">
+      <div class="row gy-4 justify-content-center">
+        {% for movie in matched_movies %}
+        <div class="col-xl-3 col-lg-4 col-md-6">
+          <div class="gallery-item h-100">
+            <a href="{% url 'movies:detail' movie.pk %}" style="display: block; height: 100%;">
+              <img src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">             
+                <a href="{% url 'movies:detail' movie.pk %}" class="details-link"><i class="fas">{{ movie.title }}</i></a>            
+              </div>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-  </a>
-  {% endfor %}
+  </section>
 </div>
-{% endif %} 
+{% endif %}
+
 {% endblock content %}

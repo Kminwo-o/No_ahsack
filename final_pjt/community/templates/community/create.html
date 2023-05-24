@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
 
+{% block style %}
+#id_title {
+  width: 321px;
+}
+{% endblock style %}
 {% block content %}
+
   <h1 class="text-center">CREATE</h1>
   <form action="" method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit">
+    <p>제목 : {{ form.title}}</p>
+    <p>평가 : <input type="number" name="rank" min="0" max="5" value="{{ form.rank.value }}" required></p>
+    <p>내용 : {{ form.content}}</p>
+    <input type="submit" value="작성" class="my-button">
   </form>
   <hr>
-  <a href="{% url 'community:index' %}">[back]</a>
+  <a href="{% url 'community:index' %}" class="my-button">목록으로</a>
+
 {% endblock %}

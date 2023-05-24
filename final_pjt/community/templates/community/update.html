@@ -3,12 +3,13 @@
 {% block content %}
   <h1>리뷰수정</h1>
   <hr >
-
   <form action="{% url 'community:update' review.pk %}" method="POST"  enctype='multipart/form-data'>
-    {% csrf_token %} {{form.as_p}}
-    <input type="submit" value="수정완료"/>
+    {% csrf_token %}   
+    <p>제목 : {{ form.title}}</p>
+    <p>평가 : {{ form.rank}}</p>
+    <p>내용 : {{ form.content}}</p>
+    <input type="submit" value="작성" class="my-button">
   </form>
-
   <hr >
-  <a href="{% url 'community:detail' review.pk %}">돌아가기</a>
+  <a href="{% url 'community:detail' review.pk %}" class="my-button">돌아가기</a>
 {% endblock content %}

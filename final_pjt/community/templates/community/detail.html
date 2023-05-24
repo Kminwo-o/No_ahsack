@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
 
-{% block content %}
-  <h2 class="text-center">DETAIL</h2>
+{% block content %}  
   {% comment %} <h3>{{ review.pk }} 번째 글</h3> {% endcomment %}
   <hr>
   <h1> {{ review.title }}</h1>
-  <p>작성자: {{ review.user}}</p>
-  <p>내용: {{ review.content }}</p>
-  <p>평점: {{ review.rank }}</p>
-  <p>작성 시각: {{ review.created_at }}</p>
+  <h3>{{ review.user}}</h3>
+  <p>{{ review.content }}</p>
+  <p>추천도: {{ review.rank }}</p>
+  <p>{{ review.created_at }}</p>
 {% comment %} 삭제하기와 수정하기는 글작성자와 로그인 유저가 같아야 버튼이 활성화됩니다. {% endcomment %}
   {% if user == review.user %} 
   <form action="{% url 'community:update' review.pk %}" method="GET">
     {% csrf_token %}
-    <input type="submit" value="수정하기">
+    <input type="submit" value="수정하기" class="my-button">
   </form>
+  <br>
   <form action="{% url 'community:delete' review.pk %}" method="POST">
     {% csrf_token %}
-    <input type="submit" value="삭제하기">
+    <input type="submit" value="삭제하기" class="my-button">
   </form>
   {% else %}
   {% endif %}
@@ -37,11 +37,13 @@
   {% if user.is_authenticated %}
     <form action="{% url 'community:create_comment' review.pk %}" method="POST">
       {% csrf_token %}
-      {{ comment_form }}
-      <input type="submit">
+      <p>{{ comment_form.content }}
+        <input type="submit" value="작성" class="my-button">
+      </p>      
     </form>
+    <hr>
   {% else %}
-    <a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
+    <a href="{% url 'accounts:login' %}" >[댓글을 작성하려면 로그인하세요.]</a>
   {% endif %}
-  <a href="{% url 'community:index' %}">[목록으로]</a>
+  <a href="{% url 'community:index' %}" class="my-button">목록으로</a>
 {% endblock  %}

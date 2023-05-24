@@ -72,6 +72,7 @@ def index(request):
     form = PostSearchForm()
     user = request.user
     if request.method == 'POST':
+        search_value = request.POST['search_word']
         search_query = request.POST.get('search_word')  # POST 요청에서 검색어 가져오기
         matched_movies = []  # 부분일치하는 영화 제목을 담을 빈 리스트 초기화
 
@@ -108,6 +109,7 @@ def index(request):
                                 'like_movie': like_movie,
                                 'recommand_movie': recommand_movie,
                                 'matched_movies': matched_movies,
+                                'search_value': search_value,
                             }
                             return render(request, 'movies/index.html', context)
         else:
@@ -116,7 +118,9 @@ def index(request):
                 'like_movie': like_movie,
                 'recommand_movie': recommand_movie,
                 'matched_movies': matched_movies,
+                'search_value': search_value,
             }
+
         return render(request, 'movies/index.html', context)
 
     else:

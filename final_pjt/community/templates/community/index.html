@@ -1,33 +1,48 @@
-{% extends 'base.html' %} {% block content %}
-<h1>Community</h1>
-<form action="{% url 'community:create' %}" method="GET">
-  <button>글쓰기</button>
+{% extends 'base.html' %} 
+
+{% block content %}
+<!-- ======= End Page Header ======= -->
+<div class="d-flex align-items-center">
+  <div class="container position-relative">
+    <div class="row d-flex justify-content-center">
+      <div class="col-lg-6 text-center">
+        <h2>REVIEW</h2>
+        <p>영화에 대한 평을 남겨주세요. </p>
+      </div>
+    </div>
+  </div>
+</div><!-- End Page Header -->
+
+<form action="{% url 'community:create' %}" method="GET" >
+  <div>
+    <button type="submit" class="my-button">글쓰기</button>
+  </div>       
 </form>
+
 <hr >
-{% for review in reviews %} {% comment %}
+{% for review in reviews %} 
+{% comment %}
 <p>
   작성자 :
   <a href="{% url 'accounts:profile' review.user.username %}"
     >{{ review.user }}</a
   >
 </p>
-{% endcomment %} {% comment %}
-<p>
-  작성자 :
-  <a href="{% url 'accounts:profile' review.user.username %}"
-    >{{ review.user }}</a
-  >
-</p>
-{% endcomment %}
+{% endcomment %} 
+
 {% comment %} <p>글 번호: {{ review.pk }}</p> {% endcomment %}
-<a href="{% url 'community:detail' review.pk %}">글 제목: {{ review.title }}</a>
+<a href="{% url 'community:detail' review.pk %}">
+  <div>
+    <h4>{{ review.title }}</h4>
+  </div>
+</a>
 {% comment %} <p>글 내용: {{ review.content }}</p> {% endcomment %}
 {% comment %} <form  action = "{% url 'community:like' review.pk %}" method="POST" id="like-form" data-review-id="{{review.pk}}"> {% endcomment %}
 <form id="like-form" data-review-id="{{review.pk}}">
   {% csrf_token %} {% if user in review.like_users.all %}
-  <button type="submit" id="like-{{ review.pk }}">좋아요 취소</button>
+  <button type="submit" id="like-{{ review.pk }}" class="my-button">좋아요 취소</button>
   {% else %}
-  <button type="submit" id="like-{{ review.pk }}">좋아요</button>
+  <button type="submit" id="like-{{ review.pk }}" class="my-button">좋아요</button>
   {% endif %}
 </form>
 <p>
@@ -38,7 +53,11 @@
 </p>
 
 <hr />
-{% endfor %} {% endblock content %} {% block script %}
+{% endfor %} 
+{% endblock content %} 
+
+
+{% block script %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   const forms = document.querySelectorAll("#like-form");

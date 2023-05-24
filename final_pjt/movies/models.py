@@ -9,7 +9,7 @@ class Movie(models.Model):
     movie_id = models.TextField()
     overview = models.TextField()
     poster_path = models.TextField(null=True)
-    release_date = models.DateField(null=True)
+    release_date = models.TextField(null=True)
     director = models.TextField()
     trailer_key = models.TextField(null=True)
     vote_average = models.TextField()

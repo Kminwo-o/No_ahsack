@@ -1,14 +1,4 @@
-{% comment %} {% extends 'base.html' %}
-{% block content %}
-<h1>Sign Up</h1>
-<form action="" method="POST">
-  {% csrf_token %}
-  <p>아이디 : {{ form.username }}</p>
-  <p>비밀번호 : {{ form.password1 }}</p>
-  <p>비밀번호 확인 : {{ form.password2 }}</p>  
-  <input type="submit">
-</form>
-{% endblock content %} {% endcomment %}
+{% load static %}
 
 {% block content %}
 <!DOCTYPE html>
@@ -24,29 +14,45 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %} " rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %} " rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %} " rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %} " rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %} " rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
   <style>
     body {
       min-height: 100vh;
+      overflow: hidden;
+      background: black;
+    }
 
-      background: -webkit-gradient(linear, left bottom, right top, from(#92b5db), to(#1d466c));
-      background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-      background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-      background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-      background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
-    }
     .kimjihun input[type="text"] {
-    width: 300px; /* 폼의 너비 조정 */
+    width: 320px; /* 폼의 너비 조정 */
     height: 30px; /* 폼의 높이 조정 */
     }
+
     .kimjihun input[type="Password"] {
-    width: 300px; /* 폼의 너비 조정 */
+    width: 320px; /* 폼의 너비 조정 */
     height: 30px; /* 폼의 높이 조정 */
+    }
+
+    .no_ahsack {
+      font-family: 'Noto Serif KR', serif;
     }
 
     .input-form {
-      max-width: 680px;
-
-      margin-top: 80px;
+      max-width: 400px;
+      min-width: 400px;
+      margin-top: 60px;
       padding: 32px;
 
       background: #fff;
@@ -57,19 +63,29 @@
       -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
       box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
     }
+    .color1 {
+      background: rgba(39, 167, 118, 0.8);
+    }
+    .bbox {
+      border: 0px solid;
+      color : white;
+      transition: 0.4s;
+    }
   </style>
 </head>
 
 <body>
-  <div class="container" style="margin-top: 100px;">
+  <div class="container" style="margin-top: 150px;">
+        <h1 class=" no_ahsack text-center text-white">
+      <p><i class="bi bi-apple"></i> No_ahsack</p></h1>
     <div class="input-form-backgroud row">
       <div class="input-form col-md-4 mx-auto">
-        <h4 class="mb-3">회원가입</h4>
+        <h4 class="text-center mb-3 no_ahsack">회원가입</h4>
         <form class="validation-form" novalidate method="POST" action="">
           {% csrf_token %}
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="{{ form.username.id_for_label }}">ID</label>
+              <label for="{{ form.username.id_for_label }}" class="no_ahsack">ID</label>
               <div class="kimjihun">{{ form.username }}</div>
               {% if form.username.errors %}
               <div class="invalid-feedback">
@@ -82,7 +98,7 @@
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="{{ form.password1.id_for_label }}">Password</label>
+              <label for="{{ form.password1.id_for_label }}" class="no_ahsack">Password</label>
               <div class="kimjihun">{{ form.password1 }}</div>
               {% if form.password1.errors %}
               <div class="invalid-feedback">
@@ -94,7 +110,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="{{ form.password2.id_for_label }}">Password check</label>
+            <label for="{{ form.password2.id_for_label }}" class="no_ahsack">Password check</label>
             <div class="kimjihun">{{ form.password2 }}</div>
             {% if form.password2.errors %}
             <div class="invalid-feedback">
@@ -111,12 +127,12 @@
             <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.(선택)</label>
           </div>
           <div class="mb-4"></div>
-          <button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
+          <button class="bbox btn-success color1 btn-lg btn-block" type="submit">가입 완료</button>
         </form>
       </div>
     </div>
     <footer class="my-3 text-center text-small">
-      <p class="mb-1">&copy; 2023 No-ahsack</p>
+      <p class="mb-1 text-white">&copy; 2023 No-ahsack</p>
     </footer>
   </div>
 </body>
