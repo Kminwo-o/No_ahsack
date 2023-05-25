@@ -112,7 +112,7 @@ def index(request):
                 'like_movie': like_movie,
                 'recommand_movie': recommand_movie,
                 'matched_movies': matched_movies,
-                'search_value': search_value,
+                'search_value': search_query,
             }
 
         return render(request, 'movies/index.html', context)

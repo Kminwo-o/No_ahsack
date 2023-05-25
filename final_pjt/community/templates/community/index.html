@@ -24,23 +24,13 @@
 <hr >
 
   {% for review in reviews %} 
-  {% comment %}
-  <p>
-    작성자 :
-    <a href="{% url 'accounts:profile' review.user.username %}"
-      >{{ review.user }}</a
-    >
-  </p>
-  {% endcomment %} 
-
-  {% comment %} <p>글 번호: {{ review.pk }}</p> {% endcomment %}
+  
   <a href="{% url 'community:detail' review.pk %}">
     <div>
       <h4>{{ review.title }}</h4>
     </div>
   </a>
-  {% comment %} <p>글 내용: {{ review.content }}</p> {% endcomment %}
-  {% comment %} <form  action = "{% url 'community:like' review.pk %}" method="POST" id="like-form" data-review-id="{{review.pk}}"> {% endcomment %}
+  
   <form id="like-form" data-review-id="{{review.pk}}">
     {% csrf_token %} 
     {% if user in review.like_users.all %}
