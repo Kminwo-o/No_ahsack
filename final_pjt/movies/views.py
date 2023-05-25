@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from .forms import PostSearchForm
 from .models import Movie
 import random
-
+from jamo import h2j, j2hcj
 
 # Create your views here.
 @require_http_methods(['GET', 'POST'])
@@ -38,27 +38,6 @@ def movie_like(request, movie_pk):
         # return redirect('community:index')
     return redirect('accounts:login')
 
-
-# @require_http_methods(['POST'])
-# def movie_like(request, movie_pk):
-#     movie = get_object_or_404(Movie, pk=movie_pk)
-#     user = request.user
-
-#     if movie.users.filter(pk=user.pk).exists():
-#         movie.users.remove(user)
-#         is_liked = False
-#     else:
-#         movie.users.add(user)
-#         is_liked = True
-#     like_count = movie.like_users.count()
-#     context = {
-#         'is_liked': is_liked,
-#         'like_count': like_count
-#     }
-
-#     return redirect('movies:detail', movie_pk)
-
-
 @require_http_methods(['GET', 'POST'])
 def index(request):
     # 로그인이 만약 안되어있으면
@@ -72,14 +51,29 @@ def index(request):
     form = PostSearchForm()
     user = request.user
     if request.method == 'POST':
-        search_value = request.POST['search_word']
         search_query = request.POST.get('search_word')  # POST 요청에서 검색어 가져오기
         matched_movies = []  # 부분일치하는 영화 제목을 담을 빈 리스트 초기화
 
         for movie in movie_data:
-            if search_query.lower() in movie.title.lower():  # 검색어가 영화 제목에 포함되는지 확인
+            matched_consonant = []
+            for i in range(len(search_query)):
+                # 검색어가 영화 제목에 포함되는지 확인
+                if search_query[i].lower() not in movie.title.lower():
+                    break
+            else:
                 matched_movies.append(movie)  # 부분일치하는 영화 제목을 리스트에 추가
 
+            # 초성 검색
+            for i in movie.title.lower():
+                jamo_str = j2hcj(h2j(i))
+                matched_consonant.append(jamo_str[0])
+
+            m_n = "".join(matched_consonant)
+
+            if search_query.lower() in m_n.lower():
+                if movie not in matched_movies:
+                    matched_movies.append(movie)
+        # 추천 영화리스트
         director_lst = dict()
         like_movie = user.movie_set.all()
         like_movie_id = set()
@@ -109,7 +103,7 @@ def index(request):
                                 'like_movie': like_movie,
                                 'recommand_movie': recommand_movie,
                                 'matched_movies': matched_movies,
-                                'search_value': search_value,
+                                'search_value': search_query,
                             }
                             return render(request, 'movies/index.html', context)
         else:
@@ -134,6 +128,7 @@ def index(request):
             else:
                 director_lst[movie.director] += 1
                 like_movie_id.add(movie.movie_id)
+                
         # 높은 순으로 정렬된 영화 감독 이름
         director_lst = sorted(director_lst.items(),
                               key=lambda x: x[1], reverse=True)

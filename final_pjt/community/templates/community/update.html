@@ -1,6 +1,7 @@
 {% extends 'base.html' %} 
 
 {% block content %}
+<div style="padding: 0 150px;">  
   <h1>리뷰수정</h1>
   <hr >
   <form action="{% url 'community:update' review.pk %}" method="POST"  enctype='multipart/form-data'>
@@ -12,4 +13,5 @@
   </form>
   <hr >
   <a href="{% url 'community:detail' review.pk %}" class="my-button">돌아가기</a>
+</div>
 {% endblock content %}

@@ -1,49 +1,51 @@
 {% extends 'base.html' %}
 
 {% block content %}  
-  {% comment %} <h3>{{ review.pk }} 번째 글</h3> {% endcomment %}
-  <hr>
-  <h1> {{ review.title }}</h1>
-  <h3>{{ review.user}}</h3>
-  <p>{{ review.content }}</p>
-  <p>추천도: {{ review.rank }}</p>
-  <p>{{ review.created_at }}</p>
-{% comment %} 삭제하기와 수정하기는 글작성자와 로그인 유저가 같아야 버튼이 활성화됩니다. {% endcomment %}
-  {% if user == review.user %} 
-  <form action="{% url 'community:update' review.pk %}" method="GET">
-    {% csrf_token %}
-    <input type="submit" value="수정하기" class="my-button">
-  </form>
-  <br>
-  <form action="{% url 'community:delete' review.pk %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="삭제하기" class="my-button">
-  </form>
-  {% else %}
-  {% endif %}
-  <hr>
-  <h4>댓글 목록</h4>
-  {% if comments|length %}
-    <p><b>{{ comments|length }}개의 댓글이 있습니다.</b></p>
-  {% endif %}
-  {% for comment in comments %}
-    <div>
-      {{ comment.user }} - {{ comment.content }}
-    </div>
-  {% empty %}
-    <p><b>댓글이 없어요..</b></p>
-  {% endfor %}
-  <hr>
-  {% if user.is_authenticated %}
-    <form action="{% url 'community:create_comment' review.pk %}" method="POST">
-      {% csrf_token %}
-      <p>{{ comment_form.content }}
-        <input type="submit" value="작성" class="my-button">
-      </p>      
-    </form>
+  <div style="padding: 0 150px;">
+    {% comment %} <h3>{{ review.pk }} 번째 글</h3> {% endcomment %}
     <hr>
-  {% else %}
-    <a href="{% url 'accounts:login' %}" >[댓글을 작성하려면 로그인하세요.]</a>
-  {% endif %}
-  <a href="{% url 'community:index' %}" class="my-button">목록으로</a>
+    <h1> {{ review.title }}</h1>
+    <h3>{{ review.user}}</h3>
+    <p>{{ review.content }}</p>
+    <p>추천도: {{ review.rank }}</p>
+    <p>{{ review.created_at }}</p>
+  {% comment %} 삭제하기와 수정하기는 글작성자와 로그인 유저가 같아야 버튼이 활성화됩니다. {% endcomment %}
+    {% if user == review.user %} 
+    <form action="{% url 'community:update' review.pk %}" method="GET">
+      {% csrf_token %}
+      <input type="submit" value="수정하기" class="my-button">
+    </form>
+    <br>
+    <form action="{% url 'community:delete' review.pk %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="삭제하기" class="my-button">
+    </form>
+    {% else %}
+    {% endif %}
+    <hr>
+    <h4>댓글 목록</h4>
+    {% if comments|length %}
+      <p><b>{{ comments|length }}개의 댓글이 있습니다.</b></p>
+    {% endif %}
+    {% for comment in comments %}
+      <div>
+        {{ comment.user }} - {{ comment.content }}
+      </div>
+    {% empty %}
+      <p><b>댓글이 없어요..</b></p>
+    {% endfor %}
+    <hr>
+    {% if user.is_authenticated %}
+      <form action="{% url 'community:create_comment' review.pk %}" method="POST">
+        {% csrf_token %}
+        <p>{{ comment_form.content }}
+          <input type="submit" value="작성" class="my-button">
+        </p>      
+      </form>
+      <hr>
+    {% else %}
+      <a href="{% url 'accounts:login' %}" >[댓글을 작성하려면 로그인하세요.]</a>
+    {% endif %}
+    <a href="{% url 'community:index' %}" class="my-button">목록으로</a>
+  </div>
 {% endblock  %}

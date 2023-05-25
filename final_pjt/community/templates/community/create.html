@@ -6,8 +6,9 @@
 }
 {% endblock style %}
 {% block content %}
-
+<div style="padding: 0 150px;">
   <h1 class="text-center">CREATE</h1>
+  <hr>
   <form action="" method="POST">
     {% csrf_token %}
     <p>제목 : {{ form.title}}</p>
@@ -17,5 +18,5 @@
   </form>
   <hr>
   <a href="{% url 'community:index' %}" class="my-button">목록으로</a>
-
+</div>
 {% endblock %}

@@ -22,13 +22,20 @@
 </div>
 
 {% if recommand_movie %}
-<h2>추천 영화 목록 </h2>
+<div style="padding: 0 50px;">   
+  <div style="display: flex; align-items: center;">
+    <h2 style="margin-right: 10px;">추천 영화 목록</h2>
+    <a href="{% url 'movies:index' %}">
+      <button class="my-button" style="height: 34px; display: flex; justify-content: center; align-items: center;">재추천</button>
+    </a>
+  </div>
+</div>
 
 <section id="gallery" class="gallery mt-8">
   <div class="container-fluid">
     <div class="row gy-4 justify-content-center">
       {% for movie in recommand_movie %}
-      <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="col-xl-3 col-lg-4 col-md-10">
         <div class="gallery-item h-100">
           <a href="{% url 'movies:detail' movie.pk %}" style="display: block; height: 100%;">
             <img src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-fluid" alt="">
@@ -62,7 +69,7 @@
     <div class="container-fluid">
       <div class="row gy-4 justify-content-center">
         {% for movie in matched_movies %}
-        <div class="col-xl-3 col-lg-4 col-md-6">
+        <div class="col-xl-3 col-lg-4 col-md-10">
           <div class="gallery-item h-100">
             <a href="{% url 'movies:detail' movie.pk %}" style="display: block; height: 100%;">
               <img src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-fluid" alt="">

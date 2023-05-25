@@ -3,4 +3,5 @@ from django.db import models
 
 
 class User(AbstractUser):
-    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    field = "__all__"
+  
