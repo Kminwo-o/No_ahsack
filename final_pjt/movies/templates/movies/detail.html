@@ -38,7 +38,7 @@
       event.preventDefault();
       const movieId = event.target.dataset.movieId;
       const btnLike = document.querySelector(`#like-${movieId}`);
-      const likeCount = document.querySelector(`#like-count-${movieId}`);
+      
                   
       axios({
         method: "post",
@@ -46,7 +46,7 @@
         headers: { "X-CSRFToken": csrfToken },
       })
         .then((response) => {
-          //likeCount.innerText = response.data.like_count;
+          
           if (response.data.is_liked) {
             btnLike.innerText = "좋아요 취소";
           } else {

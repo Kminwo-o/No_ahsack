@@ -14,8 +14,7 @@
 {% block content %}
 <div class="p-3 text-center top-search container-fluid search_bar">
 <form action="" method="POST">
-  {% csrf_token %}
-  {% comment %} <label for="{{ form.search_word.id_for_label }}" style="font-size: 32px;">{{ form.search_word.label }}</label> {% endcomment %}
+  {% csrf_token %}  
   {{ form.search_word }}
   <input type="submit" value="검색" class="my-button" style="width: 60px; height:60px; padding: 0px;">
   </form>
@@ -39,11 +38,7 @@
         <div class="gallery-item h-100">
           <a href="{% url 'movies:detail' movie.pk %}" style="display: block; height: 100%;">
             <img src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-fluid" alt="">
-            <div class="gallery-links d-flex align-items-center justify-content-center">
-              {% comment %} <i class="fas fa-external-link-alt">{{ movie.title }}</i> {% endcomment %}
-              {% comment %} <div class="mt-5 h1"></div> {% endcomment %}
-              {% comment %} <a href="{% url 'movies:detail' movie.pk %}" title="Movie Details" class="preview-link"><i class="fas fa-arrows-alt"></i></a> {% endcomment %}
-              {% comment %} <a href="{% url 'movies:detail' movie.pk %}" class="details-link"><i class="fas fa-external-link-alt">{{ movie.title }}</i></a>             {% endcomment %}
+            <div class="gallery-links d-flex align-items-center justify-content-center">              
               <a href="{% url 'movies:detail' movie.pk %}" class="details-link"><i class="fas">{{ movie.title }}</i></a>            
             </div>
           </a>
