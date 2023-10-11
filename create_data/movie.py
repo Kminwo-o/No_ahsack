@@ -33,8 +33,6 @@ def get_director_movies(person_id):
 
     else:
         return tmp_set
-
-
 def get_video(movie_id, title):
     url1 = f"https://api.themoviedb.org/3/movie/{movie_id}/videos?language=ko-KR"
     url2 = f"https://api.themoviedb.org/3/movie/{movie_id}/videos?language=en-US"
@@ -60,8 +58,6 @@ def get_video(movie_id, title):
             return i['key']
         elif 'Trailer' in i['name']:
             return i['key']
-
-
 def get_credit(movie_id):
 
     url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language=ko-KR"
@@ -78,8 +74,6 @@ def get_credit(movie_id):
         if i['job'] == "Director":
             person_id = i['id']
             return i['name'], person_id
-
-
 def get_popular():
     base_url = 'https://api.themoviedb.org/3'
     path = '/movie/popular'
@@ -164,23 +158,9 @@ def get_popular():
 
 # title, id,overview, poster_path, release_date, director, trailer_key
 movie_lst = get_popular()
+
+# 영화 총 개수
 print(len(movie_lst))
-# 감독 이름 : 있는 영화 개수
-# direc = {}
-# for i in range(len(movie_lst)):
-#     if movie_lst[i]['director'] not in direc:
-#         direc[movie_lst[i]['director']] = 1
-
-#     else:
-#         direc[movie_lst[i]['director']] = direc[movie_lst[i]['director']] + 1
-
-# for i in direc.keys():
-#     if direc[i] >= 2:
-#         print(i)
-
-
-# 비디오 출력하려면 앞에 url까지 가져가기
-# print(f'https://www.youtube.com/watch?v={movie_lst[1]["trailer_key"]}')
 
 with open('movie.json', 'w', encoding='utf-8') as f:
     json.dump(movie_lst, f, ensure_ascii=False, indent=2)
